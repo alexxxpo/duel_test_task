@@ -43,7 +43,6 @@ export class Spell {
         if (
             this.posX + this.size >= this.context.canvas.width ||
             (
-                this.dir === 1 &&
                 this.posX + this.size >= this.opponent?.posX - this.opponent.size &&
                 this.posX - this.size <= this.opponent.posX + this.opponent.size &&
                 this.posY + this.size >= this.opponent.posY - this.opponent.size &&
