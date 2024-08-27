@@ -1,11 +1,9 @@
-import { useState } from "react"
 import { Canvas, Regulator } from "./components"
 import { DEFAULT_CAST_SPEED, DEFAULT_SPEED_PLAYER, MAX_CAST_SPEED, MAX_SPEED_PLAYER, MIN_CAST_SPEED, MIN_SPEED_PLAYER } from "./consts"
 import { Player } from "./entities"
-import { compareCoords, setMouseCoordsToPlayers } from "./utils"
+import { setMouseCoordsToPlayers } from "./utils"
 
 import styles from './app.module.css'
-import { SpellColorPicker } from "./components/spell-color-picker"
 import { Scores } from "./components/scores"
 
 
@@ -37,19 +35,6 @@ function App() {
 
   const setCastSpeed = (player: Player, castSpeed: number) => {
     player.castSpeed = MAX_CAST_SPEED + MIN_CAST_SPEED - castSpeed
-  }
-
-  const setSpellColorHandler = (player: Player, spellColor: string) => {
-    player.spellColor = spellColor
-  }
-
-  const openCardHandler = (e: React.SyntheticEvent<HTMLCanvasElement, MouseEvent>) => {
-    if (compareCoords(e, playerOne)) {
-      return
-    }
-    if (compareCoords(e, playerTwo)) {
-      return
-    }
   }
 
   return (
@@ -87,11 +72,13 @@ function App() {
         draw={draw}
         style={{ border: '2px solid black' }}
         onMouseMove={mouseHandler}
-        onClick={openCardHandler}
+        playerOne={playerOne}
+        playerTwo={playerTwo}
       />
       <div className={styles.regContainer}>
 
-        <Scores setScores={() => setScores(playerOne)} />
+
+        <Scores setScores={() => setScores(playerTwo)} />
 
 
         <Regulator
