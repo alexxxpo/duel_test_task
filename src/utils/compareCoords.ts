@@ -5,13 +5,13 @@ export const compareCoords = (e: React.SyntheticEvent<HTMLCanvasElement, MouseEv
 
     if (
         //@ts-expect-error
-        e.nativeEvent.clientX - e.target.offsetLeft >= player.clX - player.size &&
+        e.nativeEvent.clientX - e.target.offsetLeft >= player.posX - player.size &&
         //@ts-expect-error
-        e.nativeEvent.clientX - e.target.offsetLeft <= player.clX + player.size &&
+        e.nativeEvent.clientX - e.target.offsetLeft <= player.posX + player.size &&
         //@ts-expect-error
-        e.nativeEvent.clientY - e.target.offsetTop >= player.clY - player.size &&
+        e.nativeEvent.clientY - e.target.offsetTop >= player.posY - player.size &&
         //@ts-expect-error
-        e.nativeEvent.clientY - e.target.offsetTop <= player.clY + player.size
+        e.nativeEvent.clientY - e.target.offsetTop <= player.posY + player.size
     ) return true
 
     return false

@@ -52,12 +52,12 @@ export function Canvas({ width, height, draw, playerOne, playerTwo, onMouseMove,
             setShowTwo(prev => !prev)
             return
         }
+        setShowOne(false)
+        setShowTwo(false)
     }
 
     return (
         <div
-            //@ts-expect-error
-            onClick={openCardHandler}
             //@ts-expect-error
             onMouseMove={onMouseMove}
         >
@@ -65,6 +65,7 @@ export function Canvas({ width, height, draw, playerOne, playerTwo, onMouseMove,
             <SpellColorPicker handler={setSpellColorHandler} player={playerTwo} open={showTwo} />
 
             <canvas
+                onClick={openCardHandler}
                 ref={canvasRef}
                 width={width}
                 height={height}
