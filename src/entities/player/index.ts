@@ -1,4 +1,5 @@
 import { Spell } from "../"
+import { DEFAULT_CAST_SPEED, DEFAULT_SPEED_PLAYER } from "../../consts";
 
 interface Params {
     posX?: number;
@@ -45,22 +46,23 @@ export class Player {
     dir: 1 | -1
     clY: number
     clX: number
-    speed: number = 1
+    speed: number = DEFAULT_SPEED_PLAYER
     private color: string
     private context: CanvasRenderingContext2D | null = null
 
     spellDir: 1 | -1
     spellColor: string
-    castDelay: number = 1000
+    castSpeed: number = DEFAULT_CAST_SPEED
     private spells: Spell[] = []
     opponent: Player | null = null
 
     private checkPos() {
         if (!this.context) return
 
-        if (this.posY >= this.context.canvas.height - this.size ||
+        if (this.posY + this.size >= this.context.canvas.height ||
             (this.dir === 1 &&
-                this.posY + this.size == this.clY &&
+                this.posY + this.size >= this.clY &&
+                this.posY + this.size - 5 <= this.clY &&
                 this.clX >= this.posX - this.size &&
                 this.clX <= this.posX + this.size
             )) { this.dir = -1 }
@@ -68,7 +70,8 @@ export class Player {
         if (this.posY <= 0 + this.size ||
             (
                 this.dir === -1 &&
-                this.posY - this.size == this.clY &&
+                this.posY - this.size <= this.clY &&
+                this.posY - this.size + 5 >= this.clY &&
                 this.clX >= this.posX - this.size &&
                 this.clX <= this.posX + this.size
             )) { this.dir = 1 }
@@ -76,19 +79,19 @@ export class Player {
 
     castSpell() {
         if (!this.context || !this.opponent) return
-        setInterval(() => {
-            this.spells.push(
-                new Spell({
-                    posX: this.posX,
-                    posY: this.posY,
-                    color: this.spellColor,
-                    dir: this.spellDir,
-                })
-            )
-        }, this.castDelay)
+        
+        if (this.posY % this.castSpeed == 0) this.spells.push(
+            new Spell({
+                posX: this.posX,
+                posY: this.posY,
+                color: this.spellColor,
+                dir: this.spellDir,
+            })
+        )
     }
 
     drawSpell() {
+        this.castSpell()
         this.spells.forEach((spell, i) => {
             if (!this.context || !this.opponent) return
 

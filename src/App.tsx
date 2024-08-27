@@ -1,7 +1,9 @@
-import { useEffect } from "react"
-import { Canvas } from "./components"
+import { Canvas, Regulator } from "./components"
+import { DEFAULT_CAST_SPEED, DEFAULT_SPEED_PLAYER, MAX_CAST_SPEED, MAX_SPEED_PLAYER, MIN_CAST_SPEED, MIN_SPEED_PLAYER } from "./consts"
 import { Player } from "./entities"
 import { setMouseCoordsToPlayers } from "./utils"
+
+import styles from './app.module.css'
 
 function App() {
 
@@ -11,22 +13,48 @@ function App() {
   playerOne.opponent = playerTwo
   playerTwo.opponent = playerOne
 
-  useEffect(() => { 
-    playerOne.castSpell()
-    playerTwo.castSpell()
-   }, [])
-
   const draw = (context: CanvasRenderingContext2D) => {
     playerOne.draw(context)
     playerTwo.draw(context)
   }
 
-  const mouseHandler: React.MouseEventHandler<HTMLCanvasElement> = (e) => {
+  const mouseHandler: React.MouseEventHandler<HTMLCanvasElement> = (e: React.SyntheticEvent<HTMLCanvasElement, MouseEvent>) => {
     setMouseCoordsToPlayers(e, playerOne, playerTwo)
   }
 
+  const setSpeed = (player: Player, speed: number) => {
+    player.speed = speed
+  }
+
+  const setCastSpeed = (player: Player, castSpeed: number) => {
+    player.castSpeed = MAX_CAST_SPEED + MIN_CAST_SPEED - castSpeed
+  }
+
   return (
-    <>
+    <div
+      className={styles.container}
+    >
+      <div className={styles.regContainer}>
+        <Regulator
+          title="Скорость героя 1"
+          type="range"
+          min={MIN_SPEED_PLAYER}
+          max={MAX_SPEED_PLAYER}
+          defaultValue={DEFAULT_SPEED_PLAYER}
+          onChange={(e) => setSpeed(playerOne, Number(e.target.value))}
+          className={styles.regulator}
+        />
+
+        <Regulator
+          title="Скорость заклинаний героя 1"
+          type="range" min={MIN_CAST_SPEED}
+          max={MAX_CAST_SPEED}
+          defaultValue={DEFAULT_CAST_SPEED}
+          onChange={(e) => setCastSpeed(playerOne, Number(e.target.value))}
+          className={styles.regulator}
+        />
+      </div>
+
       <Canvas
         width={800}
         height={600}
@@ -34,7 +62,26 @@ function App() {
         style={{ border: '2px solid black' }}
         onMouseMove={mouseHandler}
       />
-    </>
+      <div className={styles.regContainer}>
+
+        <Regulator
+          title="Скорость героя 2"
+          type="range" min={MIN_SPEED_PLAYER}
+          max={MAX_SPEED_PLAYER}
+          defaultValue={DEFAULT_SPEED_PLAYER}
+          onChange={(e) => setSpeed(playerTwo, Number(e.target.value))}
+          className={styles.regulator}
+        />
+        <Regulator
+          title="Скорость заклинаний героя 2"
+          type="range" min={MIN_CAST_SPEED}
+          max={MAX_CAST_SPEED}
+          defaultValue={DEFAULT_CAST_SPEED}
+          onChange={(e) => setCastSpeed(playerTwo, Number(e.target.value))}
+          className={styles.regulator}
+        />
+      </div>
+    </div>
   )
 
 }

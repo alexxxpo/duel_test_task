@@ -41,14 +41,14 @@ export class Spell {
     private isCollision() {
         if (!this.opponent || !this.context) return
         if (
-            this.posX + this.size >= this.context.canvas.width ||
+            this.posX + this.size > this.context.canvas.width ||
             (
-                this.posX + this.size >= this.opponent?.posX - this.opponent.size &&
-                this.posX - this.size <= this.opponent.posX + this.opponent.size &&
-                this.posY + this.size >= this.opponent.posY - this.opponent.size &&
-                this.posY - this.size <= this.opponent.posY + this.opponent.size
+                this.posX + this.size > this.opponent.posX - this.opponent.size &&
+                this.posX - this.size < this.opponent.posX + this.opponent.size &&
+                this.posY + this.size > this.opponent.posY - this.opponent.size &&
+                this.posY - this.size < this.opponent.posY + this.opponent.size
             ) ||
-            this.posX - this.size <= 0
+            this.posX - this.size < 0
         ) return true
     }
 
@@ -64,7 +64,7 @@ export class Spell {
         this.opponent = opponent
         context.fillStyle = this.color
         context.beginPath()
-        context.arc(this.posX, this.posY, this.size     , 0, Math.PI * 2)
+        context.arc(this.posX, this.posY, this.size, 0, Math.PI * 2)
         context.fill()
         return this.updatePos()
     }
