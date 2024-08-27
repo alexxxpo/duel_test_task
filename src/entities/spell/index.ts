@@ -39,27 +39,35 @@ export class Spell {
     context: CanvasRenderingContext2D | null = null
 
     private isCollision() {
-        if (!this.opponent || !this.context) return
+        if (!this.opponent || !this.context) return false
         if (
             this.posX + this.size > this.context.canvas.width ||
-            (
-                this.posX + this.size > this.opponent.posX - this.opponent.size &&
-                this.posX - this.size < this.opponent.posX + this.opponent.size &&
-                this.posY + this.size > this.opponent.posY - this.opponent.size &&
-                this.posY - this.size < this.opponent.posY + this.opponent.size
-            ) ||
             this.posX - this.size < 0
         ) return true
+        return false
+    }
+
+    private hit() {
+        if (!this.opponent || !this.context) return false
+        if (this.posX + this.size > this.opponent.posX - this.opponent.size &&
+            this.posX - this.size < this.opponent.posX + this.opponent.size &&
+            this.posY + this.size > this.opponent.posY - this.opponent.size &&
+            this.posY - this.size < this.opponent.posY + this.opponent.size) return true
+        return false
     }
 
 
     updatePos() {
-        if (this.isCollision()) return true
         this.posX += this.dir
+        const out = this.isCollision()
+        const hit = this.hit()
+        return {
+            out,
+            hit
+        }
     }
 
-    draw(context: CanvasRenderingContext2D, opponent: Player) {
-        if (!context || !opponent) return
+    draw(context: CanvasRenderingContext2D, opponent: Player): { out: boolean, hit: boolean } {
         this.context = context
         this.opponent = opponent
         context.fillStyle = this.color

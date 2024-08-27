@@ -1,9 +1,14 @@
+import { useState } from "react"
 import { Canvas, Regulator } from "./components"
 import { DEFAULT_CAST_SPEED, DEFAULT_SPEED_PLAYER, MAX_CAST_SPEED, MAX_SPEED_PLAYER, MIN_CAST_SPEED, MIN_SPEED_PLAYER } from "./consts"
 import { Player } from "./entities"
-import { setMouseCoordsToPlayers } from "./utils"
+import { compareCoords, setMouseCoordsToPlayers } from "./utils"
 
 import styles from './app.module.css'
+import { SpellColorPicker } from "./components/spell-color-picker"
+import { Scores } from "./components/scores"
+
+
 
 function App() {
 
@@ -18,6 +23,10 @@ function App() {
     playerTwo.draw(context)
   }
 
+  const setScores = (player: Player) => {
+    return player.scores
+  }
+
   const mouseHandler: React.MouseEventHandler<HTMLCanvasElement> = (e: React.SyntheticEvent<HTMLCanvasElement, MouseEvent>) => {
     setMouseCoordsToPlayers(e, playerOne, playerTwo)
   }
@@ -30,11 +39,28 @@ function App() {
     player.castSpeed = MAX_CAST_SPEED + MIN_CAST_SPEED - castSpeed
   }
 
+  const setSpellColorHandler = (player: Player, spellColor: string) => {
+    player.spellColor = spellColor
+  }
+
+  const openCardHandler = (e: React.SyntheticEvent<HTMLCanvasElement, MouseEvent>) => {
+    if (compareCoords(e, playerOne)) {
+      return
+    }
+    if (compareCoords(e, playerTwo)) {
+      return
+    }
+  }
+
   return (
     <div
       className={styles.container}
     >
       <div className={styles.regContainer}>
+
+        <Scores setScores={() => setScores(playerOne)} />
+
+
         <Regulator
           title="Скорость героя 1"
           type="range"
@@ -61,8 +87,12 @@ function App() {
         draw={draw}
         style={{ border: '2px solid black' }}
         onMouseMove={mouseHandler}
+        onClick={openCardHandler}
       />
       <div className={styles.regContainer}>
+
+        <Scores setScores={() => setScores(playerOne)} />
+
 
         <Regulator
           title="Скорость героя 2"

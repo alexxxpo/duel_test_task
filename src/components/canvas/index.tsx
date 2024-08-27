@@ -15,6 +15,7 @@ export function Canvas({ width, height, draw, ...canvasProps }: CanvasProps) {
         if (!canvasRef.current) return;
         const context = canvasRef.current.getContext('2d');
         if (!context) return;
+        
         let animationID: number;
 
         const animation = () => {

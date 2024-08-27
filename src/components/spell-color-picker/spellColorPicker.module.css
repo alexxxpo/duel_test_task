@@ -1,9 +1,13 @@
 .container {
     margin: 0 auto;
+    margin-bottom: 15px;
+    padding: 15px;
     max-width: 1200px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border: 1px solid grey;
+    border-radius: 5px;
 }
 .regContainer {
     padding: 0 40px;
@@ -14,12 +18,15 @@
     margin-bottom: 40px;
 }
 .colorRound {
-    margin-right: 10px;
-    margin-bottom: 20px;
     width: 40px;
     height: 40px;
     border-radius: 50%;
     border: 1px solid grey;
+}
+
+.colorRound:not(:last-child) {
+    margin-right: 10px;
+
 }
 
 .colorRound .active {

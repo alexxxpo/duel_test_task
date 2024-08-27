@@ -21,7 +21,7 @@ export class Player {
             posX = 0,
             posY = 0,
             color = 'grey',
-            spellColor = 'grey',
+            spellColor = 'green',
             size = 30,
             dir = 1,
             spellDir = 1,
@@ -49,12 +49,17 @@ export class Player {
     speed: number = DEFAULT_SPEED_PLAYER
     private color: string
     private context: CanvasRenderingContext2D | null = null
+    scores: number = 0
+    getScores() {
+        return this.scores
+    }
 
     spellDir: 1 | -1
     spellColor: string
     castSpeed: number = DEFAULT_CAST_SPEED
     private spells: Spell[] = []
     opponent: Player | null = null
+    private castCycle: number = 0
 
     private checkPos() {
         if (!this.context) return
@@ -79,8 +84,8 @@ export class Player {
 
     castSpell() {
         if (!this.context || !this.opponent) return
-        
-        if (this.posY % this.castSpeed == 0) this.spells.push(
+        this.castCycle += 1
+        if (this.castCycle % this.castSpeed == 0) this.spells.push(
             new Spell({
                 posX: this.posX,
                 posY: this.posY,
@@ -95,8 +100,9 @@ export class Player {
         this.spells.forEach((spell, i) => {
             if (!this.context || !this.opponent) return
 
-            const isCollision = spell.draw(this.context, this.opponent)
-            if (isCollision) this.spells.splice(i, 1)
+            const { out, hit } = spell.draw(this.context, this.opponent)
+            if (hit) this.scores += 1
+            if (out || hit) this.spells.splice(i, 1)
         })
     }
 
