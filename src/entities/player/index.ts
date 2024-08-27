@@ -109,8 +109,6 @@ export class Player {
     private updatePos() {
         this.checkPos()
         this.posY += this.dir * this.speed
-        // console.log(this.posY,this.posX, this.clY, this.clX);
-        
     }
 
     draw(context: CanvasRenderingContext2D) {
