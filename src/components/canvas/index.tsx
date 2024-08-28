@@ -1,24 +1,25 @@
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect, useState, useContext } from 'react';
 import { SpellColorPicker } from '../spell-color-picker';
 import { Player } from '../../entities';
 import { compareCoords } from '../../utils';
+import { playersContext } from '../../App';
 
 interface CanvasProps extends React.DetailedHTMLProps<React.CanvasHTMLAttributes<HTMLCanvasElement>, HTMLCanvasElement> {
     width: number;
     height: number;
     draw: (context: CanvasRenderingContext2D) => void;
-    playerOne: Player;
-    playerTwo: Player;
 }
 
 
-export function Canvas({ width, height, draw, playerOne, playerTwo, onMouseMove, ...canvasProps }: CanvasProps) {
+export function Canvas({ width, height, draw, onMouseMove, ...canvasProps }: CanvasProps) {
 
     const [showOne, setShowOne] = useState(false)
     const [showTwo, setShowTwo] = useState(false)
     const canvasRef = useRef<HTMLCanvasElement | null>(null);
+    const {playerOne, playerTwo} = useContext(playersContext)
 
     useEffect(() => {
+
         if (!canvasRef.current) return;
         const context = canvasRef.current.getContext('2d');
         if (!context) return;

@@ -5,13 +5,20 @@ import { setMouseCoordsToPlayers } from "./utils"
 
 import styles from './app.module.css'
 import { Scores } from "./components/scores"
+import { createContext } from "react"
 
 
+export const playersContext = createContext({
+  playerOne: {} as Player,
+  playerTwo: {} as Player,
+})
 
 function App() {
 
+
   const playerOne = new Player({ posX: 100, posY: 30, color: 'orange' })
   const playerTwo = new Player({ posX: 700, posY: 30, color: 'lightgreen', spellDir: -1 })
+
 
   playerOne.opponent = playerTwo
   playerTwo.opponent = playerOne
@@ -66,15 +73,16 @@ function App() {
         />
       </div>
 
-      <Canvas
-        width={800}
-        height={600}
-        draw={draw}
-        style={{ border: '2px solid black' }}
-        onMouseMove={mouseHandler}
-        playerOne={playerOne}
-        playerTwo={playerTwo}
-      />
+      <playersContext.Provider value={{playerOne, playerTwo}}>
+
+        <Canvas
+          width={800}
+          height={600}
+          draw={draw}
+          style={{ border: '2px solid black' }}
+          onMouseMove={mouseHandler}
+        />
+      </playersContext.Provider>
       <div className={styles.regContainer}>
 
 
@@ -98,7 +106,7 @@ function App() {
           className={styles.regulator}
         />
       </div>
-    </div>
+    </div >
   )
 
 }
